@@ -3,7 +3,7 @@ import 'package:app_ordeus/app/modules/auth/page.dart';
 import 'package:app_ordeus/app/modules/home/binding.dart';
 import 'package:app_ordeus/app/modules/home/page.dart';
 import 'package:get/get.dart';
-import 'package:app_ordeus/routes/routes.dart';
+import 'package:app_ordeus/app/routes/routes.dart';
 
 abstract class AppPages {
   static final pages = [

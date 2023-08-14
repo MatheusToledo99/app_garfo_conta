@@ -1,3 +1,4 @@
+import 'package:app_ordeus/app/data/models/bill.dart';
 import 'package:app_ordeus/app/data/providers/api.dart';
 
 class HomeRepository {
@@ -5,7 +6,7 @@ class HomeRepository {
 
   HomeRepository(this._api);
 
-  Future<void> getAllBills() async {
+  Future<List<BillModel>> getAllBills() async {
     return await _api.getAllBills();
   }
 }

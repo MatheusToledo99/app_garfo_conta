@@ -1,10 +1,15 @@
+import 'package:app_ordeus/app/data/models/bill.dart';
+import 'package:app_ordeus/app/data/models/employee.dart';
+import 'package:app_ordeus/app/data/models/establishment.dart';
 import 'package:app_ordeus/app/data/models/user.dart';
+import 'package:app_ordeus/app/data/services/auth/service.dart';
 import 'package:app_ordeus/app/data/services/storage/service.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
 class Api extends GetConnect {
   final _storageService = Get.find<StorageService>();
+  final _authService = Get.find<AuthService>();
 
   @override
   void onInit() {
@@ -39,17 +44,30 @@ class Api extends GetConnect {
     return token;
   }
 
-  Future<UserModel> getUser() async {
+  Future<dynamic> getUser() async {
     final result = _errorHandler(await get('auth/me'));
 
-    return UserModel.fromJson(result.body['message']);
+    return result.body['message']['user']['userType'] == 'ESTABELECIMENTO'
+        ? EstablishmentModel.fromJson(result.body['message'])
+        : EmployeeModel.fromJson(result.body['message']);
   }
 
-  Future<void> getAllBills() async {
-    // final result = _errorHandler(await get('bill/all/1'));
+  Future<List<BillModel>> getAllBills() async {
+    int establishementId = _authService.establishment.value!.establishmentId!;
+
+    final result = _errorHandler(await get('bill/all/$establishementId'));
+
+    final List<BillModel> bills = [];
+
+    for (var bill in result.body['message']) {
+      bills.add(BillModel.fromJson(bill));
+    }
+
+    return bills;
   }
 
   Response<dynamic> _errorHandler(Response response) {
+    print('Aqui -> ${response.bodyString}');
     switch (response.statusCode) {
       case 200:
       case 202:

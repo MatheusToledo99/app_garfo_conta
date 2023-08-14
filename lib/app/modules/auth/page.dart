@@ -26,6 +26,7 @@ class AuthPage extends GetView<AuthController> {
               label: 'cpf/cnpj',
               icon: Icons.person,
               controller: controller.cpfCnpjController,
+              textInputType: TextInputType.number,
             ),
             CustomTextField(
               icon: Icons.email,

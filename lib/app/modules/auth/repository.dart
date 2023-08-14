@@ -1,3 +1,4 @@
+// import 'package:app_ordeus/app/data/models/establishment.dart';
 import 'package:app_ordeus/app/data/models/user.dart';
 import 'package:app_ordeus/app/data/providers/api.dart';
 
@@ -10,7 +11,7 @@ class AuthRepository {
     return await _api.login(user);
   }
 
-  Future<UserModel> getUser() async {
+  Future<dynamic> getUser() async {
     return await _api.getUser();
   }
 }
