@@ -1,6 +1,9 @@
 import 'package:app_ordeus/app/data/models/bill.dart';
+import 'package:app_ordeus/app/data/models/category.dart';
 import 'package:app_ordeus/app/data/models/employee.dart';
 import 'package:app_ordeus/app/data/models/establishment.dart';
+import 'package:app_ordeus/app/data/models/order.dart';
+import 'package:app_ordeus/app/data/models/product.dart';
 import 'package:app_ordeus/app/data/models/user.dart';
 import 'package:app_ordeus/app/data/services/auth/service.dart';
 import 'package:app_ordeus/app/data/services/storage/service.dart';
@@ -66,8 +69,53 @@ class Api extends GetConnect {
     return bills;
   }
 
+  Future<OrderModel> getOrderByBill({required int billId}) async {
+    final result = _errorHandler(await get('order/bill/$billId'));
+
+    if (result.statusCode == 204) throw {'status-code': 204};
+
+    return OrderModel.fromJson(result.body);
+  }
+
+  Future<List<CategoryModel>> getAllCategories() async {
+    int establishementId = _authService.establishment.value!.establishmentId!;
+    final result = _errorHandler(await get("category/all/$establishementId"));
+
+    List<CategoryModel> categories = [];
+    for (var category in result.body['message']) {
+      categories.add(CategoryModel.fromJson(category));
+    }
+    return categories;
+  }
+
+  Future<void> postOrder(OrderModel order) async {
+    _errorHandler(await post('order', order.toJson()));
+  }
+
+  Future<void> addProducts(
+      {required List<ProductModel> products, required int orderId}) async {
+    final List<Map<String, dynamic>> listProductsJson = [];
+
+    for (var product in products) {
+      listProductsJson.add({'productId': product.productId});
+    }
+
+    final Map<String, dynamic> productsJson = {"products": listProductsJson};
+
+    _errorHandler(await post('order/$orderId/product', productsJson));
+  }
+
+  Future<void> invoiceOrder({required OrderModel order}) async {
+    _errorHandler(await post('order/${order.orderId}/invoice', null));
+  }
+
+  Future<void> deleteProduct(
+      {required int orderId, required int productId}) async {
+    _errorHandler(await delete('order/$orderId/product/$productId'));
+  }
+
   Response<dynamic> _errorHandler(Response response) {
-    print('Aqui -> ${response.bodyString}');
+    // print('Aqui -> ${response.bodyString}');
     switch (response.statusCode) {
       case 200:
       case 202:

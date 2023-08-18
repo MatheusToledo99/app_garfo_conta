@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.controller,
     this.textInputType,
+    this.maxLength,
   }) : super(key: key);
 
   final String label;
@@ -24,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final TextInputType? textInputType;
+  final int? maxLength;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -45,6 +47,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: SizedBox(
         height: 50,
         child: TextFormField(
+          maxLength: widget.maxLength,
           keyboardType: widget.textInputType,
           readOnly: widget.readOnly,
           initialValue: widget.initialValue,
