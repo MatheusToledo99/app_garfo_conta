@@ -21,4 +21,12 @@ class BillModel {
         billName: json['billName'],
         billBusy: json['billBusy'],
       );
+
+  Map<String, dynamic> toJson() => {
+        'billId': billId,
+        if (establishment?.establishmentId != null)
+          'establishmentId': establishment!.establishmentId,
+        if (billName != null) 'billName': billName,
+        'billBusy': billBusy,
+      };
 }

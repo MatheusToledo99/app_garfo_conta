@@ -1,5 +1,7 @@
+import 'package:app_ordeus/app/data/models/bill.dart';
 import 'package:app_ordeus/app/data/models/category.dart';
 import 'package:app_ordeus/app/data/models/order.dart';
+import 'package:app_ordeus/app/data/models/payment.dart';
 import 'package:app_ordeus/app/data/models/product.dart';
 import 'package:app_ordeus/app/data/providers/api.dart';
 
@@ -13,6 +15,10 @@ class OrderRepository {
 
   Future<List<CategoryModel>> getAllCategories() async {
     return await _api.getAllCategories();
+  }
+
+  Future<List<PaymentModel>> getPayments() async {
+    return await _api.getPayments();
   }
 
   Future<void> postOrder(OrderModel order) async {
@@ -31,5 +37,17 @@ class OrderRepository {
   Future<void> deleteProductInOrder(
       {required int orderId, required int productId}) async {
     await _api.deleteProduct(orderId: orderId, productId: productId);
+  }
+
+  Future<void> updateBill({required BillModel bill}) async {
+    await _api.updateBill(bill: bill);
+  }
+
+  Future<void> updateOrder({required OrderModel order}) async {
+    await _api.updateOrder(order: order);
+  }
+
+  Future<void> deleteOrder({required OrderModel order}) async {
+    await _api.deleteOrder(order: order);
   }
 }

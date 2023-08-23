@@ -14,6 +14,7 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.textInputType,
     this.maxLength,
+    this.maxLines = 1,
   }) : super(key: key);
 
   final String label;
@@ -26,6 +27,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? textInputType;
   final int? maxLength;
+  final int maxLines;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -43,36 +45,34 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
-      child: SizedBox(
-        height: 50,
-        child: TextFormField(
-          maxLength: widget.maxLength,
-          keyboardType: widget.textInputType,
-          readOnly: widget.readOnly,
-          initialValue: widget.initialValue,
-          inputFormatters: widget.inputFormatters,
-          obscureText: isSecret,
-          validator: widget.validator,
-          controller: widget.controller,
-          decoration: InputDecoration(
-            prefixIcon: Icon(widget.icon),
-            labelText: widget.label,
-            isDense: true,
-            suffix: widget.isPassword
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isSecret = !isSecret;
-                      });
-                    },
-                    icon: Icon(
-                        isSecret ? Icons.visibility_off : Icons.visibility),
-                  )
-                : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      child: TextFormField(
+        maxLines: widget.maxLines,
+        maxLength: widget.maxLength,
+        keyboardType: widget.textInputType,
+        readOnly: widget.readOnly,
+        initialValue: widget.initialValue,
+        inputFormatters: widget.inputFormatters,
+        obscureText: isSecret,
+        validator: widget.validator,
+        controller: widget.controller,
+        decoration: InputDecoration(
+          prefixIcon: Icon(widget.icon),
+          labelText: widget.label,
+          isDense: true,
+          suffix: widget.isPassword
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isSecret = !isSecret;
+                    });
+                  },
+                  icon:
+                      Icon(isSecret ? Icons.visibility_off : Icons.visibility),
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
           ),
         ),
       ),

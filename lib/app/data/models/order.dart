@@ -26,12 +26,14 @@ class OrderModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'billId': bill!.billId,
-        'orderObservation': orderObservation,
-        'orderResponsible': orderResponsible,
-        'products': products!
-            .map((product) => {'productId': product.productId})
-            .toList(),
+        if (bill?.billId != null) 'billId': bill!.billId,
+        if (payment?.paymentId != null) 'paymentId': payment!.paymentId,
+        if (orderObservation != null) 'orderObservation': orderObservation,
+        if (orderResponsible != null) 'orderResponsible': orderResponsible,
+        if (products != null)
+          'products': products!
+              .map((product) => {'productId': product.productId})
+              .toList(),
       };
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(

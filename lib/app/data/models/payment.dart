@@ -1,14 +1,14 @@
 class PaymentModel {
-  int? paymentId;
-  String? paymentDescription;
+  int paymentId;
+  String paymentDescription;
 
   PaymentModel({
-    this.paymentId,
-    this.paymentDescription,
+    required this.paymentId,
+    required this.paymentDescription,
   });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) => PaymentModel(
-        paymentId: json['paymentId'],
-        paymentDescription: json['paymentDescription'],
+        paymentId: json['paymentId'] as int,
+        paymentDescription: json['paymentDescription'] as String,
       );
 }

@@ -3,6 +3,7 @@ import 'package:app_ordeus/app/data/models/category.dart';
 import 'package:app_ordeus/app/data/models/employee.dart';
 import 'package:app_ordeus/app/data/models/establishment.dart';
 import 'package:app_ordeus/app/data/models/order.dart';
+import 'package:app_ordeus/app/data/models/payment.dart';
 import 'package:app_ordeus/app/data/models/product.dart';
 import 'package:app_ordeus/app/data/models/user.dart';
 import 'package:app_ordeus/app/data/services/auth/service.dart';
@@ -72,7 +73,12 @@ class Api extends GetConnect {
   Future<OrderModel> getOrderByBill({required int billId}) async {
     final result = _errorHandler(await get('order/bill/$billId'));
 
-    if (result.statusCode == 204) throw {'status-code': 204};
+    if (result.statusCode == 204) {
+      throw {
+        'status-code': 204,
+        'message': "Não há nenhum pedido em aberto para esta comanda"
+      };
+    }
 
     return OrderModel.fromJson(result.body);
   }
@@ -86,6 +92,17 @@ class Api extends GetConnect {
       categories.add(CategoryModel.fromJson(category));
     }
     return categories;
+  }
+
+  Future<List<PaymentModel>> getPayments() async {
+    final result = _errorHandler(await get("payment"));
+
+    List<PaymentModel> payments = [];
+    for (Map<String, dynamic> payment in result.body['message']) {
+      payments.add(PaymentModel.fromJson(payment));
+    }
+
+    return payments;
   }
 
   Future<void> postOrder(OrderModel order) async {
@@ -112,6 +129,18 @@ class Api extends GetConnect {
   Future<void> deleteProduct(
       {required int orderId, required int productId}) async {
     _errorHandler(await delete('order/$orderId/product/$productId'));
+  }
+
+  Future<void> updateBill({required BillModel bill}) async {
+    _errorHandler(await patch('bill/${bill.billId}', bill.toJson()));
+  }
+
+  Future<void> deleteOrder({required OrderModel order}) async {
+    _errorHandler(await delete('order/${order.orderId}'));
+  }
+
+  Future<void> updateOrder({required OrderModel order}) async {
+    _errorHandler(await patch('order/${order.orderId}', order.toJson()));
   }
 
   Response<dynamic> _errorHandler(Response response) {
